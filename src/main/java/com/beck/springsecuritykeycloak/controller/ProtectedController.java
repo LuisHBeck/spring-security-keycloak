@@ -1,5 +1,8 @@
 package com.beck.springsecuritykeycloak.controller;
 
+import com.beck.springsecuritykeycloak.dto.CookieInfoDto;
+import com.beck.springsecuritykeycloak.dto.JWTInfoDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -12,43 +15,33 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProtectedController {
 
     @GetMapping
-    public String privateRoute() {
-        return """
-                <h1> Protected route 🔐</h1>      
-                """;
+    public ResponseEntity<String> privateRoute() {
+        return ResponseEntity.ok("Protected route 🔐");
     }
 
     @GetMapping("/cookie")
-    public String cookie(@AuthenticationPrincipal OidcUser user) {
-        return """
-                <h1> Protected route 🔐</h1>
-                <h2> IdToken: %s</h2>
-                <h2> UserName: %s</h2>
-                <h2> Authorities: %s</h2>             
-                <h2> OidcUser: %s</h2>
-                <img src="%s">        
-                """
-                .formatted(
-                        user.getIdToken().getTokenValue(),
-                        user.getEmail(),
-                        user.getAuthorities(),
-                        user,
-                        user.getAttribute("picture")
-                );
+    public ResponseEntity<CookieInfoDto> cookie(@AuthenticationPrincipal OidcUser user) {
+        CookieInfoDto cookieInfo = new CookieInfoDto(
+                "Protected route 🔐",
+                user.getName(),
+                user.getEmail(),
+                user.getIdToken().getTokenValue(),
+                user.getAuthorities().toString(),
+                user.getAttribute("picture"),
+                user);
+
+        return ResponseEntity.ok(cookieInfo);
     }
 
     @GetMapping("/jwt")
-    public String jwt(@AuthenticationPrincipal Jwt jwt) {
-        return String.format(
-                """
-                JWT: %s \n
-                EMAIL: %s \n
-                CLAIMS: %s 
-                """,
+    public ResponseEntity<JWTInfoDto> jwt(@AuthenticationPrincipal Jwt jwt) {
+        JWTInfoDto jwtInfo = new JWTInfoDto(
                 jwt.getTokenValue(),
                 jwt.getClaim("email"),
-                jwt.getClaims()
+                jwt.getClaims().toString()
         );
+
+        return ResponseEntity.ok(jwtInfo);
     }
 
 }
