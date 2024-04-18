@@ -1,0 +1,43 @@
+version: '3.3'
+services:
+  keycloak-db:
+    image: postgres
+    container_name: keycloak-db
+    environment:
+      POSTGRES_PASSWORD: kcPass@@
+      POSTGRES_USER: kcUser
+      POSTGRES_DB: keycloak_db
+    ports:
+      - 6969:5432
+    volumes:
+      - keycloak-db-volume:/var/lib/postgresql/data
+    networks:
+      - net
+
+  keycloak-server:
+    depends_on:
+      - keycloak-db
+    image: quay.io/keycloak/keycloak:22.0.5
+    command: start-dev
+    container_name: keycloak-server
+#    restart: unless-stopped
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_USERNAME: kcUser
+      KC_DB_PASSWORD: kcPass@@
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak_db
+      KC_FEATURES: token-exchange,admin-fine-grained-authz
+      KC_HOSTNAME: 127.0.0.1
+    ports:
+      - 9090:8080
+    networks:
+      - net
+
+volumes:
+  keycloak-db-volume:
+
+networks:
+  net:
+    driver: bridge
