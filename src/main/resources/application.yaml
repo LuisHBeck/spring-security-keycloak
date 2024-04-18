@@ -8,7 +8,7 @@ spring:
   security:
     oauth2:
       client:
-        # GOOGLE AS AUTH SERVER
+        # KEYCLOAK AS AUTH SERVER
         registration:
           keycloak:
             client-id: ${CLIENT_ID}
