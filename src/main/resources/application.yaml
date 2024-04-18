@@ -10,5 +10,9 @@ spring:
             client-id: 820693728551-87ee6o84qob5a1l9kd9fojq8brmle7aq.apps.googleusercontent.com
             client-secret: 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
 
-#server:
-#  port: 8080
+      resourceserver:
+        jwt:
+          issuer-uri: https://accounts.google.com
+
+server:
+  port: 8080

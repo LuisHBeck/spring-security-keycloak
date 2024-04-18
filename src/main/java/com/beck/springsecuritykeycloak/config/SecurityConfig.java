@@ -19,7 +19,9 @@ public class SecurityConfig {
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers("/logout").permitAll()
                         .anyRequest().authenticated())
-                .oauth2Login(withDefaults());
+                .oauth2Login(withDefaults())
+                .oauth2ResourceServer(conf -> conf
+                        .jwt(withDefaults()));
 
         return http.build();
     }
