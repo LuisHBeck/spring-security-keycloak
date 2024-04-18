@@ -1,36 +1,35 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: spring-security-keycloak
 
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          google:
-#            client-id: 820693728551-87ee6o84qob5a1l9kd9fojq8brmle7aq.apps.googleusercontent.com
-#            client-secret: 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
-#
-#      resourceserver:
-#        jwt:
-#          issuer-uri: https://accounts.google.com
-
-
   security:
     oauth2:
       client:
+        # GOOGLE AS AUTH SERVER
         registration:
           keycloak:
-            client-id: spring-security-keycloak
-            client-secret: HRi68XvCS29TvSpDuEsflcEzrK5nYx4V
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
             scope: openid
 
         provider:
           keycloak:
-            issuer-uri: http://127.0.0.1:9090/realms/beck
+            issuer-uri: http://${HOST}:9090/realms/beck
 
       resourceserver:
         jwt:
-          issuer-uri: http://127.0.0.1:9090/realms/beck
+          issuer-uri: http://${HOST}:9090/realms/beck
 
-server:
-  port: 8080
+
+      # GOOGLE AS AUTH SERVER
+#      registration:
+#        google:
+#          client-id: ${CLIENT_ID}
+#          client-secret: ${CLIENT_SECRET}
+#
+#        resourceserver:
+#          jwt:
+#            issuer-uri: https://accounts.google.com
