@@ -18,3 +18,12 @@ cd /opt/keycloak/bin/
 ```powershell
 ./kcadm.sh update realms/master -s sslRequired=NONE --server http://localhost:8080
 ```
+
+Backup and restore keycloak-db-volume
+```powershell
+docker run --rm --volumes-from keycloak-db -v $(pwd):/backup busybox tar cvfz /backup/backup.tar /var/lib/postgresql/data
+```
+
+```powershell
+docker run --rm --volumes-from keycloak-db -v $(pwd):/backup busybox sh -c "cd /var/lib/postgresql/data && tar xvf /backup/backup.tar --strip 1"
+```
