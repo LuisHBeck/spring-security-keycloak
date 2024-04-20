@@ -18,9 +18,9 @@ services:
     depends_on:
       - keycloak-db
     image: quay.io/keycloak/keycloak:22.0.5
-    command: start-dev
+    command: start-dev --import-realm
     container_name: keycloak-server
-#    restart: unless-stopped
+    restart: unless-stopped
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -28,10 +28,11 @@ services:
       KC_DB_USERNAME: kcUser
       KC_DB_PASSWORD: kcPass@@
       KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak_db
-      KC_FEATURES: token-exchange,admin-fine-grained-authz
       KC_HOSTNAME: 127.0.0.1
     ports:
       - 9090:8080
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import
     networks:
       - net
 
