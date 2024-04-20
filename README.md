@@ -19,11 +19,19 @@ cd /opt/keycloak/bin/
 ./kcadm.sh update realms/master -s sslRequired=NONE --server http://localhost:8080
 ```
 
-Backup and restore keycloak-db-volume
+Export keycloak configs
 ```powershell
-docker run --rm --volumes-from keycloak-db -v $(pwd):/backup busybox tar cvfz /backup/backup.tar /var/lib/postgresql/data
+docker exec -it <container_id> sh
 ```
 
 ```powershell
-docker run --rm --volumes-from keycloak-db -v $(pwd):/backup busybox sh -c "cd /var/lib/postgresql/data && tar xvf /backup/backup.tar --strip 1"
+cd /opt/keycloak/bin/
+```
+
+```powershell
+./kc.sh export --file /tmp/keycloak.json
+```
+
+```powershell
+docker cp <container_id>:/tmp/keycloak.json ./keycloak/
 ```
